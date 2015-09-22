@@ -107,4 +107,8 @@ FS.prototype.putBytes = ready(function (pos, buf, opts, cb) {
   fs.write(this.fd, buf, 0, buf.length, pos, cb)
 })
 
+FS.prototype.destroy = function (cb) {
+  fs.close(this.fd, cb)
+}
+
 function noop () {}
