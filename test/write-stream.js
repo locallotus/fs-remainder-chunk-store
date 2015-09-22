@@ -3,7 +3,7 @@ var Store = require('../')
 
 test('write stream', function (t) {
   t.plan(2)
-  var store = Store(5, { path: '/tmp/rem-' + Math.random() })
+  var store = Store(5, '/tmp/rem-' + Math.random())
   var w = store.createWriteStream()
   w.write('abc')
   w.write('def')
