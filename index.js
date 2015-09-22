@@ -78,6 +78,7 @@ FS.prototype.getBytes = ready(function (i, j, opts, cb) {
     cb = opts
     opts = {}
   }
+  if (!opts) opts = {}
   if (!cb) cb = noop
   var self = this
   var buf = new Buffer(defined(opts.length, j - i))

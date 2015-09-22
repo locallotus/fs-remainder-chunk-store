@@ -19,3 +19,17 @@ test('error after destroy', function (t) {
     })
   })
 })
+
+test('eat result', function (t) {
+  t.plan(2)
+  var store = Store(5, file)
+  store.once('open', function (offset, rem) {
+    t.equal(offset, 3)
+    t.deepEqual(rem, new Buffer('abc'))
+    var w = store.createWriteStream()
+    w.write('abc')
+    w.end(function () {
+      store.getBytes(0, 3)
+    })
+  })
+})
