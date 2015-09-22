@@ -1,0 +1,30 @@
+{
+  "name": "fs-remainder-chunk-store",
+  "version": "1.0.0",
+  "description": "chunk store for append-only byte-aligned data",
+  "main": "index.js",
+  "scripts": {
+    "test": "tape test/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/substack/fs-remainder-chunk-store.git"
+  },
+  "keywords": [
+    "chunk",
+    "store",
+    "remainder",
+    "append"
+  ],
+  "author": "substack",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/substack/fs-remainder-chunk-store/issues"
+  },
+  "homepage": "https://github.com/substack/fs-remainder-chunk-store#readme",
+  "dependencies": {
+    "duplexify": "^3.4.2",
+    "inherits": "^2.0.1",
+    "readable-stream": "^2.0.2"
+  }
+}
