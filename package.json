@@ -4,6 +4,7 @@
   "description": "chunk store for append-only byte-aligned data",
   "main": "index.js",
   "scripts": {
+    "coverage": "covert test/*.js",
     "test": "tape test/*.js"
   },
   "repository": {
@@ -30,7 +31,7 @@
   },
   "devDependencies": {
     "abstract-chunk-store": "^1.1.8",
-    "tape": "^4.2.0",
-    "tmpdir": "^1.0.1"
+    "covert": "^1.1.0",
+    "tape": "^4.2.0"
   }
 }
