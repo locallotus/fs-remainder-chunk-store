@@ -3,6 +3,7 @@ var inherits = require('inherits')
 var EventEmitter = require('events').EventEmitter
 var Writable = require('readable-stream/writable')
 var duplexify = require('duplexify')
+var defined = require('defined')
 
 module.exports = FS
 inherits(FS, EventEmitter)
@@ -79,15 +80,16 @@ FS.prototype.getBytes = ready(function (i, j, opts, cb) {
   }
   if (!cb) cb = noop
   var self = this
-  var buf = new Buffer(j - i)
+  var buf = new Buffer(defined(opts.length, j - i))
   var total = 0
-  fs.read(self.fd, buf, 0, buf.length, i, onread)
+  var offset = defined(opts.offset, 0)
+  fs.read(self.fd, buf, 0, buf.length, i + offset, onread)
  
   function onread (err, bytesRead) {
     if (err) return cb(err)
     total += bytesRead
     if (total < buf.length && bytesRead > 0) {
-      fs.read(self.fd, buf, total, j - i - total, i + total, onread)
+      fs.read(self.fd, buf, total, j - i - total, i + total + offset, onread)
     } else if (bytesRead === 0) {
       cb(null, buf.slice(0, total))
     } else cb(null, buf)
@@ -95,6 +97,13 @@ FS.prototype.getBytes = ready(function (i, j, opts, cb) {
 })
 
 FS.prototype.put = function (n, buf, opts, cb) {
+  if (typeof opts === 'function') {
+    cb = opts
+    opts = {}
+  }
+  if (buf.length !== this.size) {
+    return tick(cb, new Error('invalid chunk length'))
+  }
   this.putBytes(this.size * n, buf, opts, cb)
 }
 
@@ -107,8 +116,11 @@ FS.prototype.putBytes = ready(function (pos, buf, opts, cb) {
   fs.write(this.fd, buf, 0, buf.length, pos, cb)
 })
 
-FS.prototype.destroy = function (cb) {
+FS.prototype.destroy = ready(function (cb) {
   fs.close(this.fd, cb)
-}
+})
 
 function noop () {}
+function tick (cb, err) {
+  if (cb) process.nextTick(function () { cb(err) })
+}
